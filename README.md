@@ -6,15 +6,22 @@ This code the following libraries
 REQUESTS
 
 git clone git://github.com/kennethreitz/requests.git
+
 cd requests
+
 python setup.py install
 
 
 SPI
 
 sudo apt-get install python-dev
+
 mkdir python-spi
+
 cd python-spi
+
 wget https://raw.github.com/doceme/py-spidev/master/setup.py
+
 wget https://raw.github.com/doceme/py-spidev/master/spidev_module.c
+
 sudo python setup.py install
