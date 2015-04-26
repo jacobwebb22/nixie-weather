@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import json
-import requests
+#import requests
 import serial
 import time
 import datetime
@@ -34,14 +34,14 @@ def SelectLineOne():
     return
 
 def SelectLineTwo():
-	port.write(254)
+    port.write(254)
     time.sleep(0.005)
     port.write(192)
     time.sleep(0.005)
     return
 
 def ClearScreen():
-	port.write(254)
+    port.write(254)
     time.sleep(0.005)
     port.write(1)
     time.sleep(0.005)
@@ -76,15 +76,15 @@ def WriteLines(line1, line2):
 
 def WriteNixie():
 	
-	current = datetime.datetime.now()
+    current = datetime.datetime.now()
 	
-	one=current.second%10
-	two=current.second/10
-	one = one<<4
+    one=current.second%10
+    two=current.second/10
+    one = one<<4
 
-	seconds = one + two
+    seconds = one + two
 
-	one=current.minute%10
+    one=current.minute%10
     two=current.minute/10
     one = one<<4
 
@@ -96,7 +96,7 @@ def WriteNixie():
 
     hours = one + two
 
-	one=current.month%10
+    one=current.month%10
     two=current.month/10
     one = one<<4
 
@@ -108,9 +108,9 @@ def WriteNixie():
 
     days = one + two
 	
-	spi.writebytes([seconds, minutes, hours, days, months])
+    spi.writebytes([seconds, minutes, hours, days, months])
 
-	return
+    return
 
 #####################################################
 ########## -----  Initiate Weather Data -------#######
@@ -156,12 +156,12 @@ def WriteNixie():
 def PrintWeather():
 
 	
-	SetScreenBacklight(20)
-	ClearScreen()
+    SetScreenBacklight(20)
+    ClearScreen()
     WriteLines('    UPDATING    ')
 
 
-	while GPIO.input(18) :
+    while GPIO.input(18) :
 	
 		# Get Weather Forecast
 
@@ -203,18 +203,18 @@ def PrintWeather():
 
 		# Display Loop Through Forecast Days
 
-	SetScreenBacklight(0)		
-	return
+     SetScreenBacklight(0)		
+     return
 
 #####################################################
 ############# -----  Run Infinite Loop -------#######
 #####################################################
 
-while var == 1 : 
-	WriteNixie()
+while 1 : 
+    WriteNixie()
 
-	SetScreenBacklight(20)
-	ClearScreen()
+    SetScreenBacklight(20)
+    ClearScreen()
     WriteLines('    UPDATING    ')
 
 #	if GPIO.input(18):
@@ -228,7 +228,7 @@ while var == 1 :
 #			printcond3()
 
 
-	time.sleep(0.1)
+    time.sleep(0.1)
 
 
 
