@@ -27,32 +27,32 @@ port = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout = 2)
 #####################################################
 
 def SelectLineOne():
-    port.write(bytes([254]))
+    port.write(b'\xfe')
     time.sleep(0.005)
-    port.write(bytes([128]))
+    port.write(b'\x80')
     time.sleep(0.005)
     return
 
 def SelectLineTwo():
-    port.write(bytes([254]))
+    port.write(b'\xfe')
     time.sleep(0.005)
-    port.write(bytes([192]))
+    port.write(b'\xc0')
     time.sleep(0.005)
     return
 
 def ClearScreen():
-    port.write(bytes([254]))
+    port.write(b'\xfe')
     time.sleep(0.005)
-    port.write(bytes([1]))
+    port.write(b'\x01')
     time.sleep(0.005)
     return
 
 def SetScreenBacklight(brightness): # From 1 to 30
 
-    port.write(bytes([124]))
+    port.write(b'\x7c')
     time.sleep(0.005)
     out = 127+brightness
-    port.write(bytes([out]))
+    port.write(b'\x93')
     time.sleep(0.005)
     return
 
@@ -108,7 +108,7 @@ def WriteNixie():
 
     days = one + two
 	
-    spi.writebytes([seconds, minutes, hours, days, months])
+    spi.writebytes([months, days, hours, minutes, seconds])
 
     return
 
