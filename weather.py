@@ -158,7 +158,7 @@ def PrintWeather():
 	
     SetScreenBacklight(20)
     ClearScreen()
-    WriteLines('    UPDATING    ')
+    WriteLine('    UPDATING    ')
 
 
     while GPIO.input(18) :
@@ -215,7 +215,7 @@ while 1 :
 
     SetScreenBacklight(20)
     ClearScreen()
-    WriteLines('    UPDATING    ')
+    WriteLine('    UPDATING    ')
 
 #	if GPIO.input(18):
 #		if millis%10 == 1
