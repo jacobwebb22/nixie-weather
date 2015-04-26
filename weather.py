@@ -213,6 +213,10 @@ def PrintWeather():
 while var == 1 : 
 	WriteNixie()
 
+	SetScreenBacklight(20)
+	ClearScreen()
+    WriteLines('    UPDATING    ')
+
 #	if GPIO.input(18):
 #		if millis%10 == 1
 #			printcondnow()
