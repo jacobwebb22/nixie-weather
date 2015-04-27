@@ -20,7 +20,7 @@ GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Setup Serial Port to interface with serial to lcd converter board
 
-port = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout = 2)
+port = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout = 0.1)
 
 #####################################################
 ########## -----  Declare LCD Functions-------#######
@@ -28,32 +28,32 @@ port = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout = 2)
 
 def SelectLineOne():
     port.write(b'\xfe')
-    time.sleep(0.005)
+    time.sleep(0.15)
     port.write(b'\x80')
-    time.sleep(0.005)
+    time.sleep(0.15)
     return
 
 def SelectLineTwo():
     port.write(b'\xfe')
-    time.sleep(0.005)
+    time.sleep(0.15)
     port.write(b'\xc0')
-    time.sleep(0.005)
+    time.sleep(0.15)
     return
 
 def ClearScreen():
     port.write(b'\xfe')
-    time.sleep(0.005)
+    time.sleep(0.15)
     port.write(b'\x01')
-    time.sleep(0.005)
+    time.sleep(0.15)
     return
 
 def SetScreenBacklight(brightness): # From 1 to 30
 
     port.write(b'\x7c')
-    time.sleep(0.005)
+    time.sleep(0.15)
     out = 127+brightness
     port.write(b'\x93')
-    time.sleep(0.005)
+    time.sleep(0.15)
     return
 
 def WriteLine( line ):
@@ -64,10 +64,10 @@ def WriteLines(line1, line2):
     ClearScreen()
     SelectLineOne()
     port.write(line1)
-    time.sleep(0.005)
+    time.sleep(0.15)
     SelectLineTwo()
     port.write(line2)
-    time.sleep(0.005)
+    time.sleep(0.15)
     return
 
 #####################################################
@@ -90,8 +90,14 @@ def WriteNixie():
 
     minutes = one + two
 
-    one=current.hour%10
-    two=current.hour/10
+    houradjust = current.hour
+    if houradjust == 0:
+        houradjust = 12
+    if houradjust > 12:
+        houradjust = houradjust - 12
+
+    one=houradjust%10
+    two=houradjust/10
     one = one<<4
 
     hours = one + two
@@ -108,7 +114,7 @@ def WriteNixie():
 
     days = one + two
 	
-    spi.writebytes([months, days, hours, minutes, seconds])
+    spi.writebytes([days, months, seconds, minutes, hours])
 
     return
 
@@ -210,12 +216,13 @@ def PrintWeather():
 ############# -----  Run Infinite Loop -------#######
 #####################################################
 
+SetScreenBacklight(20)
+ClearScreen()
+WriteLine('    UPDATING    ')
+
+
 while 1 : 
     WriteNixie()
-
-    SetScreenBacklight(20)
-    ClearScreen()
-    WriteLine('    UPDATING    ')
 
 #	if GPIO.input(18):
 #		if millis%10 == 1
