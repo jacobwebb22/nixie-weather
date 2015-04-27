@@ -26,33 +26,45 @@ port = serial.Serial("/dev/ttyAMA0", baudrate = 9600)
 ########## -----  Declare LCD Functions-------#######
 #####################################################
 
+# Set screen type
+
+#port.write(chr(124))
+#time.sleep(0.1)
+#port.write(chr(4))
+#time.sleep(0.1)
+#port.write(chr(124))
+#time.sleep(0.1)
+#port.write(chr(6))
+#time.sleep(0.1)
+
+
 def SelectLineOne():
     port.write(chr(254))
-    time.sleep(0.01)
+    time.sleep(0.1)
     port.write(chr(128))
-    time.sleep(0.01)
+    time.sleep(0.1)
     return
 
 def SelectLineTwo():
     port.write(chr(254))
-    time.sleep(0.01)
+    time.sleep(0.1)
     port.write(chr(192))
-    time.sleep(0.01)
+    time.sleep(0.1)
     return
 
 def ClearScreen():
     port.write(chr(254))
-    time.sleep(0.01)
+    time.sleep(0.1)
     port.write(chr(1))
-    time.sleep(0.01)
+    time.sleep(0.1)
     return
 
 def SetScreenBacklight(brightness): # From 1 to 30
     port.write(chr(124))
-    time.sleep(0.01)
+    time.sleep(0.1)
     out = 127+brightness
     port.write(chr(out))
-    time.sleep(0.01)
+    time.sleep(0.1)
     return
 
 def WriteLine( line ):
@@ -63,10 +75,10 @@ def WriteLines(line1, line2):
     ClearScreen()
     SelectLineOne()
     port.write(line1)
-    time.sleep(0.01)
+    time.sleep(0.1)
     SelectLineTwo()
     port.write(line2)
-    time.sleep(0.01)
+    time.sleep(0.1)
     return
 
 #####################################################
