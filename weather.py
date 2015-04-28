@@ -15,8 +15,9 @@ spi.open(0,0)
 
 # Initialize GPIO
 
+gpiopin = 26
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(gpiopin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Setup Serial Port to interface with serial to lcd converter board
 
@@ -135,40 +136,47 @@ def WriteNixie():
 
 # Get IP Address
 
-#url = 'http://curlmyip.com'
-#ip = requests.get(url)
-#ip = ip.text.rstrip()
+url = 'http://curlmyip.com'
+ip = requests.get(url)
+ip = ip.text.rstrip()
 #print ip
 
 # Get Zip Code and City
 
-#f = open('code1.txt', 'r') #read in personal wunderground api code
-#code1 = f.readline()
-#code1 = code1.rstrip() #remove newline at end of string
-#f.close()
+f = open('code1.txt', 'r') #read in personal wunderground api code
+code1 = f.readline()
+code1 = code1.rstrip() #remove newline at end of string
+f.close()
 
-#url = 'http://api.ipinfodb.com/v3/ip-city/?key='+code1+'&format=json&ip='+ip
-#response = requests.get(url)
-#data = json.loads(response.text)
+url = 'http://api.ipinfodb.com/v3/ip-city/?key='+code1+'&format=json&ip='+ip
+response = requests.get(url)
+data = json.loads(response.text)
 
-#zipcode = data['zipCode']
-#city = data['cityName']
+zipcode = data['zipCode']
+city = data['cityName']
 #print zipcode
 #print city
 
 # Get Current Weather
 
-#f = open('code2.txt', 'r') #read in personal wunderground api code
-#code2 = f.readline()
-#code2 = code2.rstrip() #remove newline at end of string
-#f.close()
+f = open('code2.txt', 'r') #read in personal wunderground api code
+code2 = f.readline()
+code2 = code2.rstrip() #remove newline at end of string
+f.close()
 
-#urlnow = 'http://api.wunderground.com/api/'+code2+'/conditions/q/'+zipcode+'.json'
-#urlfuture = 'http://api.wunderground.com/api/'+code2+'/forecast10day/q/'+zipcode+'.json'
+urlnow = 'http://api.wunderground.com/api/'+code2+'/conditions/q/'+zipcode+'.json'
+urlfuture = 'http://api.wunderground.com/api/'+code2+'/forecast10day/q/'+zipcode+'.json'
 
 #####################################################
 ############# -----  Run Infinite Loop -------#######
 #####################################################
+
+def PrintNixieWait():
+	delayinsec = 3
+    for i in range(0, delayinsec*10):
+         WriteNixie()
+         time.sleep(0.1)
+    return
 
 def PrintWeather():
 
@@ -178,73 +186,90 @@ def PrintWeather():
     WriteLine('    UPDATING    ')
 
 
-    while GPIO.input(18) :
+    while GPIO.input(gpiopin) :
 	
-		# Get Weather Forecast
+	# Get Weather Forecast
 
-	#	response = requests.get(urlnow)
-	#	data = json.loads(response.text)
+        response = requests.get(urlnow)
+        data = json.loads(response.text)
 
-	#	tempnow = data['current_observation']['temp_f']
-	#	condnow = data['current_observation']['weather']
+        tempnow = data['current_observation']['temp_f']
+        condnow = data['current_observation']['weather']
 
-		#print tempnow
-		#print condnow
+        #print tempnow
+        #print condnow
 
-	#	response = requests.get(urlfuture)
-	#	data = json.loads(response.text)
+        response = requests.get(urlfuture)
+        data = json.loads(response.text)
 
-	#	day1 = data['forecast']['simpleforecast']['forecastday'][0]['date']['weekday_short']
-	#	day2 = data['forecast']['simpleforecast']['forecastday'][1]['date']['weekday_short']
-	#	day3 = data['forecast']['simpleforecast']['forecastday'][2]['date']['weekday_short']
-	#	day4 = data['forecast']['simpleforecast']['forecastday'][3]['date']['weekday_short']
-	#	day5 = data['forecast']['simpleforecast']['forecastday'][4]['date']['weekday_short']
+        day1 = data['forecast']['simpleforecast']['forecastday'][0]['date']['weekday_short']
+        day2 = data['forecast']['simpleforecast']['forecastday'][1]['date']['weekday_short']
+        day3 = data['forecast']['simpleforecast']['forecastday'][2]['date']['weekday_short']
+        day4 = data['forecast']['simpleforecast']['forecastday'][3]['date']['weekday_short']
+        day5 = data['forecast']['simpleforecast']['forecastday'][4]['date']['weekday_short']
 
-	#	cond1 = data['forecast']['simpleforecast']['forecastday'][0]['conditions']
-	#	cond2 = data['forecast']['simpleforecast']['forecastday'][1]['conditions']
-	#	cond3 = data['forecast']['simpleforecast']['forecastday'][2]['conditions']
-	#	cond4 = data['forecast']['simpleforecast']['forecastday'][3]['conditions']
-	#	cond5 = data['forecast']['simpleforecast']['forecastday'][4]['conditions']
+        cond1 = data['forecast']['simpleforecast']['forecastday'][0]['conditions']
+        cond2 = data['forecast']['simpleforecast']['forecastday'][1]['conditions']
+        cond3 = data['forecast']['simpleforecast']['forecastday'][2]['conditions']
+        cond4 = data['forecast']['simpleforecast']['forecastday'][3]['conditions']
+        cond5 = data['forecast']['simpleforecast']['forecastday'][4]['conditions']
 
-	#	temphigh1 = data['forecast']['simpleforecast']['forecastday'][0]['high']['fahrenheit']
-	#	temphigh2 = data['forecast']['simpleforecast']['forecastday'][1]['high']['fahrenheit']
-	#	temphigh3 = data['forecast']['simpleforecast']['forecastday'][2]['high']['fahrenheit']
-	#	temphigh4 = data['forecast']['simpleforecast']['forecastday'][3]['high']['fahrenheit']
-	#	temphigh5 = data['forecast']['simpleforecast']['forecastday'][4]['high']['fahrenheit']
+        temphigh1 = data['forecast']['simpleforecast']['forecastday'][0]['high']['fahrenheit']
+        temphigh2 = data['forecast']['simpleforecast']['forecastday'][1]['high']['fahrenheit']
+        temphigh3 = data['forecast']['simpleforecast']['forecastday'][2]['high']['fahrenheit']
+        temphigh4 = data['forecast']['simpleforecast']['forecastday'][3]['high']['fahrenheit']
+        temphigh5 = data['forecast']['simpleforecast']['forecastday'][4]['high']['fahrenheit']
 
-	#	templow1 = data['forecast']['simpleforecast']['forecastday'][0]['low']['fahrenheit']
-	#	templow2 = data['forecast']['simpleforecast']['forecastday'][1]['low']['fahrenheit']
-	#	templow3 = data['forecast']['simpleforecast']['forecastday'][2]['low']['fahrenheit']
-	#	templow4 = data['forecast']['simpleforecast']['forecastday'][3]['low']['fahrenheit']
-	#	templow5 = data['forecast']['simpleforecast']['forecastday'][4]['low']['fahrenheit']
+        templow1 = data['forecast']['simpleforecast']['forecastday'][0]['low']['fahrenheit']
+        templow2 = data['forecast']['simpleforecast']['forecastday'][1]['low']['fahrenheit']
+        templow3 = data['forecast']['simpleforecast']['forecastday'][2]['low']['fahrenheit']
+        templow4 = data['forecast']['simpleforecast']['forecastday'][3]['low']['fahrenheit']
+        templow5 = data['forecast']['simpleforecast']['forecastday'][4]['low']['fahrenheit']
 
-		# Display Loop Through Forecast Days
-
-     SetScreenBacklight(0)		
-     return
+        # Display Loop Through Forecast Days
+        
+        ClearScreen()
+        WriteLines(city + "    " + day1, tempnow + " " + condnow)
+        PrintNixieWait()
+        ClearScreen()
+        if GPIO.input(gpiopin)==0:
+            break
+        WriteLines("Today" + "      " + templow1 + "-" + temphigh1, cond1)
+        PrintNixieWait()
+        ClearScreen()
+        if GPIO.input(gpiopin)==0:
+            break
+        WriteLines(day2 + "        " + templow2 + "-" + temphigh2, cond2)
+        PrintNixieWait()
+        ClearScreen()
+        if GPIO.input(gpiopin)==0:
+            break
+        WriteLines(day3 + "        " + templow3 + "-" + temphigh3, cond3)
+        PrintNixieWait()
+        ClearScreen()
+        if GPIO.input(gpiopin)==0:
+            break
+        WriteLines(day4 + "        " + templow4 + "-" + temphigh4, cond4)
+        PrintNixieWait()
+        ClearScreen()
+        if GPIO.input(gpiopin)==0:
+            break
+        WriteLines(day5 + "        " + templow5 + "-" + temphigh5, cond5)
+        PrintNixieWait()
+    
+    ClearScreen()
+    SetScreenBacklight(0)
+    return
 
 #####################################################
 ############# -----  Run Infinite Loop -------#######
 #####################################################
 
-SetScreenBacklight(20)
-ClearScreen()
-WriteLine('    UPDATING    ')
-
-
 while 1 : 
     WriteNixie()
 
-#	if GPIO.input(18):
-#		if millis%10 == 1
-#			printcondnow()
-#		if millis%10 == 2
-#			printcond1()
-#		if millis%10 == 3
-#			printcond2()
-#		if millis%10 == 4
-#			printcond3()
-
+    if GPIO.input(18):
+        PrintWeather()
 
     time.sleep(0.1)
 
