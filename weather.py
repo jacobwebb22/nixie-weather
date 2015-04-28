@@ -228,32 +228,32 @@ def PrintWeather():
         # Display Loop Through Forecast Days
         
         ClearScreen()
-        WriteLines(city + "    " + day1, tempnow + " " + condnow)
+        WriteLines(chr(city) + "    " + day1, chr(tempnow) + " " + chr(condnow))
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines("Today" + "      " + templow1 + "-" + temphigh1, cond1)
+        WriteLines("Today" + "      " + chr(templow1) + "-" + chr(temphigh1), chr(cond1))
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(day2 + "        " + templow2 + "-" + temphigh2, cond2)
+        WriteLines(chr(day2) + "        " + chr(templow2) + "-" + chr(temphigh2), chr(cond2))
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(day3 + "        " + templow3 + "-" + temphigh3, cond3)
+        WriteLines(chr(day3) + "        " + chr(templow3) + "-" + chr(temphigh3), chr(cond3))
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(day4 + "        " + templow4 + "-" + temphigh4, cond4)
+        WriteLines(chr(day4)) + "        " + chr(templow4) + "-" + chr(temphigh4), chr(cond4))
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(day5 + "        " + templow5 + "-" + temphigh5, cond5)
+        WriteLines(chr(day5) + "        " + chr(templow5) + "-" + chr(temphigh5), chr(cond5))
         PrintNixieWait()
     
     ClearScreen()
