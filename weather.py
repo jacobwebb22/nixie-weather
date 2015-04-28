@@ -268,7 +268,7 @@ def PrintWeather():
 while 1 : 
     WriteNixie()
 
-    if GPIO.input(18):
+    if GPIO.input(gpiopin):
         PrintWeather()
 
     time.sleep(0.1)
