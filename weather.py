@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import json
-#import requests
+import requests
 import serial
 import time
 import datetime
@@ -172,14 +172,13 @@ urlfuture = 'http://api.wunderground.com/api/'+code2+'/forecast10day/q/'+zipcode
 #####################################################
 
 def PrintNixieWait():
-	delayinsec = 3
+    delayinsec = 3
     for i in range(0, delayinsec*10):
          WriteNixie()
          time.sleep(0.1)
     return
 
 def PrintWeather():
-
 	
     SetScreenBacklight(20)
     ClearScreen()
