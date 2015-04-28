@@ -41,16 +41,17 @@ port = serial.Serial("/dev/ttyAMA0", baudrate = 9600)
 
 def SelectLineOne():
     port.write(chr(254))
-    time.sleep(0.1)
+    time.sleep(0.05)
     port.write(chr(128))
-    time.sleep(0.1)
+    time.sleep(0.05)
     return
 
 def SelectLineTwo():
     port.write(chr(254))
-    time.sleep(0.1)
+    time.sleep(0.05)
+#    port.write(chr(192))
     port.write(chr(192))
-    time.sleep(0.1)
+    time.sleep(0.05)
     return
 
 def ClearScreen():
@@ -228,32 +229,32 @@ def PrintWeather():
         # Display Loop Through Forecast Days
         
         ClearScreen()
-        WriteLines(chr(city) + "    " + day1, chr(tempnow) + " " + chr(condnow))
+        WriteLines(city + "    " + day1, str(tempnow) + " " + condnow)
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines("Today" + "      " + chr(templow1) + "-" + chr(temphigh1), chr(cond1))
+        WriteLines("Today" + "      " + str(templow1) + "-" + str(temphigh1), cond1)
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(chr(day2) + "        " + chr(templow2) + "-" + chr(temphigh2), chr(cond2))
+        WriteLines(day2 + "        " + str(templow2) + "-" + str(temphigh2), cond2)
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(chr(day3) + "        " + chr(templow3) + "-" + chr(temphigh3), chr(cond3))
+        WriteLines(day3 + "        " + str(templow3) + "-" + str(temphigh3), cond3)
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(chr(day4)) + "        " + chr(templow4) + "-" + chr(temphigh4), chr(cond4))
+        WriteLines(day4 + "        " + str(templow4) + "-" + str(temphigh4), cond4)
         PrintNixieWait()
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
-        WriteLines(chr(day5) + "        " + chr(templow5) + "-" + chr(temphigh5), chr(cond5))
+        WriteLines(day5 + "        " + str(templow5) + "-" + str(temphigh5), cond5)
         PrintNixieWait()
     
     ClearScreen()
@@ -263,6 +264,9 @@ def PrintWeather():
 #####################################################
 ############# -----  Run Infinite Loop -------#######
 #####################################################
+
+ClearScreen()
+SetScreenBacklight(0)
 
 while 1 : 
     WriteNixie()
