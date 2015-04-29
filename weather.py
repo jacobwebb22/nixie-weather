@@ -29,43 +29,34 @@ port = serial.Serial("/dev/ttyAMA0", baudrate = 9600)
 
 # Set screen type to 16x2
 
-port.write(chr(124))
-time.sleep(0.05)
-port.write(chr(4))
-time.sleep(0.05)
-port.write(chr(124))
-time.sleep(0.05)
-port.write(chr(6))
-time.sleep(0.05)
+#port.write(b'\x7C\x04')
+#time.sleep(0.5)
+#port.write(b'\x7C\x06')
+#time.sleep(0.5)
 
 def SelectLineOne():
-    port.write(chr(254))
-    time.sleep(0.05)
-    port.write(chr(128))
-    time.sleep(0.05)
+    port.write(b'\xFE\x80')
+    time.sleep(0.005)
     return
 
 def SelectLineTwo():
-    port.write(chr(254))
-    time.sleep(0.05)
-#    port.write(chr(192))
-    port.write(chr(192))
-    time.sleep(0.05)
+    port.write(b'\xFE\xC0')
+    time.sleep(0.005)
     return
 
 def ClearScreen():
-    port.write(chr(254))
-    time.sleep(0.1)
-    port.write(chr(1))
-    time.sleep(0.1)
+    port.write(b'\xFE\x01')
+    time.sleep(0.005)
     return
 
-def SetScreenBacklight(brightness): # From 1 to 30
-    port.write(chr(124))
-    time.sleep(0.1)
-    out = 127+brightness
-    port.write(chr(out))
-    time.sleep(0.1)
+def SetScreenBacklightHigh(): # From 1 to 30
+    port.write(b'\x7C\x94')
+    time.sleep(0.05)
+    return
+
+def SetScreenBacklightLow(): # From 1 to 30
+    port.write(b'\x7C\x80')
+    time.sleep(0.05)
     return
 
 def WriteLine( line ):
@@ -73,13 +64,12 @@ def WriteLine( line ):
     return
 
 def WriteLines(line1, line2):
-    ClearScreen()
     SelectLineOne()
     port.write(line1)
-    time.sleep(0.1)
+    time.sleep(0.005)
     SelectLineTwo()
     port.write(line2)
-    time.sleep(0.1)
+    time.sleep(0.005)
     return
 
 #####################################################
@@ -171,8 +161,7 @@ urlfuture = 'http://api.wunderground.com/api/'+code2+'/forecast10day/q/'+zipcode
 ############# -----  Run Infinite Loop -------#######
 #####################################################
 
-def PrintNixieWait():
-    delayinsec = 3
+def PrintNixieWait(delayinsec):
     for i in range(0, delayinsec*10):
          WriteNixie()
          time.sleep(0.1)
@@ -180,7 +169,7 @@ def PrintNixieWait():
 
 def PrintWeather():
 	
-    SetScreenBacklight(20)
+    SetScreenBacklightHigh()
     ClearScreen()
     WriteLine('    UPDATING    ')
 
@@ -228,36 +217,36 @@ def PrintWeather():
         # Display Loop Through Forecast Days
         
         ClearScreen()
-        WriteLines(city + "    " + day1, str(tempnow) + " " + condnow)
-        PrintNixieWait()
+        WriteLines(city + "   " + day1, str(tempnow) + "-" + condnow)
+        PrintNixieWait(4)
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
         WriteLines("Today" + "      " + str(templow1) + "-" + str(temphigh1), cond1)
-        PrintNixieWait()
+        PrintNixieWait(4)
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
         WriteLines(day2 + "        " + str(templow2) + "-" + str(temphigh2), cond2)
-        PrintNixieWait()
+        PrintNixieWait(4)
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
         WriteLines(day3 + "        " + str(templow3) + "-" + str(temphigh3), cond3)
-        PrintNixieWait()
+        PrintNixieWait(4)
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
         WriteLines(day4 + "        " + str(templow4) + "-" + str(temphigh4), cond4)
-        PrintNixieWait()
+        PrintNixieWait(4)
         ClearScreen()
         if GPIO.input(gpiopin)==0:
             break
         WriteLines(day5 + "        " + str(templow5) + "-" + str(temphigh5), cond5)
-        PrintNixieWait()
+        PrintNixieWait(4)
     
     ClearScreen()
-    SetScreenBacklight(0)
+    SetScreenBacklightLow()
     return
 
 #####################################################
@@ -265,7 +254,7 @@ def PrintWeather():
 #####################################################
 
 ClearScreen()
-SetScreenBacklight(0)
+SetScreenBacklightLow()
 
 while 1 : 
     WriteNixie()
@@ -273,7 +262,7 @@ while 1 :
     if GPIO.input(gpiopin):
         PrintWeather()
 
-    time.sleep(0.1)
+    time.sleep(0.2)
 
 
 
