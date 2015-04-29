@@ -217,7 +217,7 @@ def PrintWeather():
         # Display Loop Through Forecast Days
         
         ClearScreen()
-        WriteLines(city + "   " + day1, str(tempnow) + "-" + condnow)
+        WriteLines(city + "   " + day1, str(tempnow)[0] + str(tempnow)[1] + "-" + condnow)
         PrintNixieWait(4)
         ClearScreen()
         if GPIO.input(gpiopin)==0:
