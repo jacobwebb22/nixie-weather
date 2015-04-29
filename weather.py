@@ -27,17 +27,16 @@ port = serial.Serial("/dev/ttyAMA0", baudrate = 9600)
 ########## -----  Declare LCD Functions-------#######
 #####################################################
 
-# Set screen type
+# Set screen type to 16x2
 
-#port.write(chr(124))
-#time.sleep(0.1)
-#port.write(chr(4))
-#time.sleep(0.1)
-#port.write(chr(124))
-#time.sleep(0.1)
-#port.write(chr(6))
-#time.sleep(0.1)
-
+port.write(chr(124))
+time.sleep(0.05)
+port.write(chr(4))
+time.sleep(0.05)
+port.write(chr(124))
+time.sleep(0.05)
+port.write(chr(6))
+time.sleep(0.05)
 
 def SelectLineOne():
     port.write(chr(254))
