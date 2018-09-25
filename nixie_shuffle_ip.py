@@ -87,9 +87,9 @@ def WriteList(listval):
 def WriteMonte():
 	listout = [0,1,2,3,4,5,6,7,8,9]
 	holder = 0
-	for i in range(0, 210):
+	for i in range(0, 250):
 		WriteList(listout)
-		time.sleep(0.3)
+		time.sleep(0.4)
 		holder = listout[0]
 		listout[0] = listout[1]
 		listout[1] = listout[2]
@@ -113,9 +113,7 @@ while 1 :
 	WriteNixie()
 	time.sleep(0.2)
 	currentnow = datetime.datetime.now()
-#	if currentnow.hour%2 == 0 and currentnow.minute/10 == 0 and currentnow.minute%10 == 1:
-	min = currentnow.minute
-	if min%10==1 or min%10==3 or min%10==5 or min%10==7 or min%10==9: 
+	if currentnow.hour%2 == 0 and currentnow.minute/10 == 0 and currentnow.minute%10 == 1: 
 		WriteMonte()
 		
 
