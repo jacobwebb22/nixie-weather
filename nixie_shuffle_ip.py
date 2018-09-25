@@ -10,59 +10,6 @@ import spidev
 spi = spidev.SpiDev()
 spi.open(0,0)
 
-# Setup Serial Port to interface with serial to lcd converter board
-
-port = serial.Serial("/dev/ttyAMA0", baudrate = 9600)
-
-#####################################################
-########## -----  Declare LCD Functions-------#######
-#####################################################
-
-# Set screen type to 16x2
-
-#port.write(b'\x7C\x04')
-#time.sleep(0.5)
-#port.write(b'\x7C\x06')
-#time.sleep(0.5)
-
-def SelectLineOne():
-    port.write(b'\xFE\x80')
-    time.sleep(0.005)
-    return
-
-def SelectLineTwo():
-    port.write(b'\xFE\xC0')
-    time.sleep(0.005)
-    return
-
-def ClearScreen():
-    port.write(b'\xFE\x01')
-    time.sleep(0.005)
-    return
-
-def SetScreenBacklightHigh(): # From 1 to 30
-    port.write(b'\x7C\x94')
-    time.sleep(0.05)
-    return
-
-def SetScreenBacklightLow(): # From 1 to 30
-    port.write(b'\x7C\x80')
-    time.sleep(0.05)
-    return
-
-def WriteLine( line ):
-    port.write(line)
-    return
-
-def WriteLines(line1, line2):
-    SelectLineOne()
-    port.write(line1)
-    time.sleep(0.005)
-    SelectLineTwo()
-    port.write(line2)
-    time.sleep(0.005)
-    return
-
 #####################################################
 ########## -----  Nixie Print Function -------#######
 #####################################################
@@ -116,65 +63,64 @@ def checkval(val)
 		val = 0
 	return val
 	
-def WriteList(startval):
+def WriteList(listval):
 	
-	sa = startval<<4
-	sb = startval+1
-	sb = checkval(sb)
+	sa = listval[0]<<4
+	sb = listval[1]
 	s1 = sa+sb
-	startval = sb+1
-	startval = checkval(startval)
 	
-	sa = startval<<4
-	sb = startval+1
-	sb = checkval(sb)
-	s2 = sa+sb
-	startval = sb+1
-	startval = checkval(startval)
+	sa = listval[2]<<4
+	sb = listval[3]
+	s1 = sa+sb
 	
-	sa = startval<<4
-	sb = startval+1
-	sb = checkval(sb)
-	s3 = sa+sb
-	startval = sb+1
-	startval = checkval(startval)
+	sa = listval[4]<<4
+	sb = listval[5]
+	s1 = sa+sb
 	
-	sa = startval<<4
-	sb = startval+1
-	sb = checkval(sb)
-	s4 = sa+sb
-	startval = sb+1
-	startval = checkval(startval)
+	sa = listval[6]<<4
+	sb = listval[7]
+	s1 = sa+sb
 	
-	sa = startval<<4
-	sb = startval+1
-	sb = checkval(sb)
-	s5 = sa+sb
-	startval = sb+1
-	startval = checkval(startval)
+	sa = listval[8]<<4
+	sb = listval[9]
+	s1 = sa+sb
 
 	spi.writebytes([s1, s2, s3, s4, s5])
 	
 	return
 
 def WriteMonte()
-	for i in range(0, 100):
-		WriteList(i)
+	listout = [0,1,2,3,4,5,6,7,8,9]
+	holder = 0
+	for i in range(0, 210):
+		WriteList(listout)
 		time.sleep(0.3)
+		holder = listout[0]
+		listout[0] = listout[1]
+		listout[1] = listout[2]
+		listout[2] = listout[3]
+		listout[3] = listout[4]
+		listout[4] = listout[5]
+		listout[5] = listout[6]
+		listout[6] = listout[7]
+		listout[7] = listout[8]
+		listout[8] = listout[9]
+		listout[9] = holder
 	return
 
 
 #####################################################
 ############# -----  Run Infinite Loop -------#######
 #####################################################
-
+### Every two hours run Montecarlo Deburn ###########
 
 while 1 : 
 	WriteNixie()
 	time.sleep(0.2)
 	currentnow = datetime.datetime.now()
-	if currentnow.hour%2 == 0
+	if currentnow.hour%2 == 0 and currentnow.minute/10 == 0 and currentnow.minute%10 == 1:
 		WriteMonte()
+		
 
 
 
