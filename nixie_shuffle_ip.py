@@ -57,11 +57,6 @@ def WriteNixie():
     spi.writebytes([days, months, seconds, minutes, hours])
 
     return
-
-def checkval(val)
-	if val == 10:
-		val = 0
-	return val
 	
 def WriteList(listval):
 	
@@ -71,25 +66,25 @@ def WriteList(listval):
 	
 	sa = listval[2]<<4
 	sb = listval[3]
-	s1 = sa+sb
+	s2 = sa+sb
 	
 	sa = listval[4]<<4
 	sb = listval[5]
-	s1 = sa+sb
+	s3 = sa+sb
 	
 	sa = listval[6]<<4
 	sb = listval[7]
-	s1 = sa+sb
+	s4 = sa+sb
 	
 	sa = listval[8]<<4
 	sb = listval[9]
-	s1 = sa+sb
+	s5 = sa+sb
 
 	spi.writebytes([s1, s2, s3, s4, s5])
 	
 	return
 
-def WriteMonte()
+def WriteMonte():
 	listout = [0,1,2,3,4,5,6,7,8,9]
 	holder = 0
 	for i in range(0, 210):
@@ -118,7 +113,9 @@ while 1 :
 	WriteNixie()
 	time.sleep(0.2)
 	currentnow = datetime.datetime.now()
-	if currentnow.hour%2 == 0 and currentnow.minute/10 == 0 and currentnow.minute%10 == 1:
+#	if currentnow.hour%2 == 0 and currentnow.minute/10 == 0 and currentnow.minute%10 == 1:
+	min = currentnow.minute
+	if min%10==1 or min%10==3 or min%10==5 or min%10==7 or min%10==9: 
 		WriteMonte()
 		
 
